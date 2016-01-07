@@ -1,4 +1,6 @@
 from flask import current_app as app
+from namethatbird.app import db
+from namethatbird.modules.sounds.models import (XenoCantoSound, Sound)
 import requests
 
 
@@ -38,7 +40,7 @@ def download_archive(first_nr=1, last_nr=None):
         recs = query_nr_range(idx, idx+STEP_SIZE-1)
 
         # Process recordings
-        pass
+        process_recordings(recs)
 
 
 def query_since(since=0):
@@ -86,4 +88,14 @@ def get_last_recording():
 
     return last_rec
 
+
+def process_recordings(recs):
+    if recs.get("recordings"):
+        for rec in recs.get('recordings'):
+            xc_sound = XenoCantoSound()
+            xc_sound.xc_data_to_xc_sound(rec)
+
+            sound = Sound()
+            sound.xc_sound = xc_sound
+            sound.save()
 
