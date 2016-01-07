@@ -1,3 +1,4 @@
+from flask import current_app as app
 import requests
 
 
@@ -85,6 +86,4 @@ def get_last_recording():
 
     return last_rec
 
-
-download_archive()
 
