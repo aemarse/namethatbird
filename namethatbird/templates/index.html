@@ -17,8 +17,6 @@
   <div class="container">
 
     <div class="splash" id="birdDiv">
-      <h1></h1>
-      <h3></h3>
     </div>
 
   </div>
@@ -26,11 +24,29 @@
   {{ super() }}
 
   <script>
+  // On-click handler for sidebar buttons
   $("button").click(function(){
-    $.ajax({url: "/random", success: function(result){
-        $("#birdDiv").html(result["xc_sound"]["english_name"]);
+
+    // TO DO: select proper AJAX url based on which button is clicked
+    var ajaxUrl = "/random"
+
+    // Make the AJAX call
+    $.ajax({url: ajaxUrl, success: function(result){
+        // Create the DOM elements in the center container
+        createBirdDOM(result);
     }});
   });
+
+  // Function that creates the DOM elements in the center container that display the bird information
+  function createBirdDOM(data) {
+      // Create the DOM elements as vars
+      var englishName = $("<h1></h1>").text(data["xc_sound"]["english_name"]);
+      var recordedAt = $("<p></p>").text(data["xc_sound"]["recorded_at"]);
+
+      // Append the DOM elements to the div
+      $("#birdDiv").append(englishName, recordedAt);
+  }
+
   </script>
 
 {% endblock %}
