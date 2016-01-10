@@ -1,9 +1,10 @@
-import datetime
+import random
 import arrow
 from namethatbird.app import db
+from namethatbird.mixins import NameThatBirdMixin
 
 
-class XenoCantoSound(db.EmbeddedDocument):
+class XenoCantoSound(NameThatBirdMixin, db.EmbeddedDocument):
     id = db.IntField(required=True, unique=True)
     genus = db.StringField()
     species = db.StringField()
@@ -38,8 +39,23 @@ class XenoCantoSound(db.EmbeddedDocument):
         self.recorded_at = arrow.get(timestamp, 'YYYY-MM-DD HH:mm').datetime
 
 
-class Sound(db.Document):
+class Sound(NameThatBirdMixin, db.Document):
     created_at = db.DateTimeField(default=arrow.utcnow().datetime, required=True)
     updated_at = db.DateTimeField(default=arrow.utcnow().datetime, required=True)
 
     xc_sound = db.EmbeddedDocumentField(XenoCantoSound)
+
+    @classmethod
+    def get_random_recording(cls):
+        """
+
+        :return:
+        """
+        # Get count of all records
+        count = len(cls.objects)
+
+        # Generate a random number between 0 and "count"
+        rand_idx = random.randrange(0, count)
+
+        # Get the object at the rand_idx
+        return cls.objects[rand_idx]

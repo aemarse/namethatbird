@@ -13,5 +13,17 @@
         </ul>
     </div>
   </div>
+
   {{ super() }}
+
+  <script>
+  $("button").click(function(){
+    $.ajax({url: "/random", success: function(result){
+        <!--$("#div1").html(result);-->
+        console.log(result);
+        console.log(result["xc_sound"]["english_name"]);
+    }});
+  });
+  </script>
+
 {% endblock %}
